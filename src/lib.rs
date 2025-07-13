@@ -160,7 +160,7 @@ impl<T> LyonWriter<T> {
     }
 
     /// Build [`Tree`] before writing.
-    fn prepare(mut self) -> Result<Tree, LyonTranslationError> {
+    fn prepare(self) -> Result<Tree, LyonTranslationError> {
         // get the global transform to apply to each node's bbox
         let global_transform = self.global_transform.unwrap_or_default();
         // calculate transformed dimensions
@@ -219,20 +219,20 @@ impl<T> LyonWriter<T> {
             ..Default::default()
         }));
 
-        use std::cmp::Ordering::*;
-        self.nodes
-            .sort_unstable_by(|a, b| match (&*a.borrow(), &*b.borrow()) {
-                (NodeKind::Group(_), _) => Greater,
-                (_, NodeKind::Group(_)) => Less,
-                (NodeKind::Image(_), _) => Greater,
-                (_, NodeKind::Image(_)) => Less,
-                (NodeKind::Text(_), NodeKind::Path(_)) => Greater,
-                (NodeKind::Path(_), NodeKind::Text(_)) => Less,
-                (NodeKind::Path(p1), NodeKind::Path(p2)) => (2 * p1.fill.is_some() as u8
-                    + p1.stroke.is_some() as u8)
-                    .cmp(&(2 * p2.fill.is_some() as u8 + p2.stroke.is_some() as u8)),
-                _ => Equal,
-            });
+        // use std::cmp::Ordering::*;
+        // self.nodes
+        //     .sort_unstable_by(|a, b| match (&*a.borrow(), &*b.borrow()) {
+        //         (NodeKind::Group(_), _) => Greater,
+        //         (_, NodeKind::Group(_)) => Less,
+        //         (NodeKind::Image(_), _) => Greater,
+        //         (_, NodeKind::Image(_)) => Less,
+        //         (NodeKind::Text(_), NodeKind::Path(_)) => Greater,
+        //         (NodeKind::Path(_), NodeKind::Text(_)) => Less,
+        //         (NodeKind::Path(p1), NodeKind::Path(p2)) => (2 * p1.fill.is_some() as u8
+        //             + p1.stroke.is_some() as u8)
+        //             .cmp(&(2 * p2.fill.is_some() as u8 + p2.stroke.is_some() as u8)),
+        //         _ => Equal,
+        //     });
         for path in self.nodes {
             group_node.append(path);
         }
