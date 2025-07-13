@@ -12,7 +12,8 @@ readme = "README.md"
 
 [dependencies]
 lyon_path = "1.0.4"
-usvg = "0.36.0"
+# usvg = "0.36.0"
+usvg={git="https://github.com/karolisr/resvg", branch="v36"}
 
 # dependencies exclusive for wasm32
 [target.'cfg(target_arch = "wasm32")'.dependencies]
